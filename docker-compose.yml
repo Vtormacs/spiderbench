@@ -1,0 +1,21 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: spiderbench-app
+    environment:
+      - TZ=America/Sao_Paulo
+    networks:
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.spiderbench.rule=Host(`jogodomiranha.tr1.com.br`)"
+      - "traefik.http.routers.spiderbench.entrypoints=websecure"
+      - "traefik.http.routers.spiderbench.tls.certresolver=letsencrypt"
+      - "traefik.http.services.spiderbench.loadbalancer.server.port=80"
+
+networks:
+  proxy:
+    external: true
